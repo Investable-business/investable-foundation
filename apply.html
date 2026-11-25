@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Apply for Mentorship · Investable Foundation</title>
+  <style>
+    :root { --bg:#f6f7f9; --card:#fff; --text:#1a1a1a; --muted:#5b6270; --line:#dde1e7; --accent:#1a1a1a; --ok:#17663a; --okbg:#e6f6ec; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family: system-ui, -apple-system, sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+    .wrap { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
+    header h1 { margin: 0 0 8px; font-size: 1.75rem; }
+    header p { margin: 0; color: var(--muted); }
+    section { background:var(--card); border-radius:16px; padding:24px; margin-top:20px; box-shadow:0 2px 12px rgba(0,0,0,.05); }
+    section h2 { margin:0 0 16px; font-size:1.1rem; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .full { grid-column: 1 / -1; }
+    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+    label { display:block; font-weight:600; font-size:.92rem; margin-bottom:6px; }
+    .req { color:#b42318; }
+    .hint { font-weight:400; color:var(--muted); font-size:.85rem; }
+    input, select, textarea { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:8px; font:inherit; background:#fff; color:inherit; }
+    textarea { min-height:100px; resize:vertical; }
+    input:focus, select:focus, textarea:focus { outline:2px solid #4c7cf0; outline-offset:1px; border-color:transparent; }
+    .checks { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+    @media (max-width: 600px) { .checks { grid-template-columns: 1fr; } }
+    .check { display:flex; gap:10px; align-items:flex-start; font-weight:400; margin:0; }
+    .check input { width:auto; margin-top:4px; }
+    .error { color:#b42318; font-size:.85rem; margin-top:6px; }
+    button { margin-top:24px; width:100%; padding:14px; border:0; border-radius:10px; background:var(--accent); color:#fff; font-size:1rem; font-weight:600; cursor:pointer; }
+    .done { text-align:center; }
+    .done .tick { font-size:3rem; }
+    .done .badge { display:inline-block; margin-top:12px; padding:8px 14px; border-radius:8px; background:var(--okbg); color:var(--ok); font-weight:600; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"></script>
+
+  <script type="text/babel">
+    const HELP_AREAS = [
+      "Fundraising & investor readiness", "Business strategy", "Product development",
+      "Sales & marketing", "Finance & financial modelling", "Legal & compliance",
+      "Operations & hiring", "Leadership & personal growth",
+    ];
+
+    function Field({ label, required, hint, full, children }) {
+      return (
+        <div className={full ? "full" : ""}>
+          <label>
+            {label} {required && <span className="req">*</span>}
+            {hint && <span className="hint"> ({hint})</span>}
+          </label>
+          {children}
+        </div>
+      );
+    }
+
+    function App() {
+      const [submitted, setSubmitted] = React.useState(null);
+      const [helpError, setHelpError] = React.useState(false);
+
+      function handleSubmit(e) {
+        e.preventDefault();
+        const data = new FormData(e.target);
+        const help = data.getAll("helpAreas");
+        if (help.length === 0) { setHelpError(true); return; }
+        const entry = Object.fromEntries(data.entries());
+        entry.helpAreas = help;
+        entry.submittedAt = new Date().toISOString();
+        // ponytail: not saved anywhere yet. Send `entry` to the database once it's connected.
+        console.log("Application", entry);
+        setSubmitted(entry);
+        window.scrollTo(0, 0);
+      }
+
+      if (submitted) {
+        return (
+          <div className="wrap">
+            <section className="done">
+              <div className="tick">🎉</div>
+              <h1>Thank you, {submitted.fullName.split(" ")[0]}!</h1>
+              <p>Your application for <strong>{submitted.businessName}</strong> has been received.
+                 Our team will review it and be in touch at {submitted.email}.</p>
+              <div className="badge">Application submitted</div>
+            </section>
+          </div>
+        );
+      }
+
+      return (
+        <div className="wrap">
+          <header>
+            <h1>Apply for Mentorship</h1>
+            <p>Tell us about you and your business. We use this to assess how our mentors can best support you.
+               It takes about 10 minutes. Fields marked <span className="req">*</span> are required.</p>
+          </header>
+
+          <form onSubmit={handleSubmit}>
+            <section>
+              <h2>1. About you</h2>
+              <div className="grid">
+                <Field label="Full name" required><input name="fullName" required autoComplete="name" /></Field>
+                <Field label="Your role" required hint="e.g. CEO, co-founder"><input name="role" required /></Field>
+                <Field label="Email" required><input name="email" type="email" required autoComplete="email" /></Field>
+                <Field label="Phone number" required><input name="phone" type="tel" required autoComplete="tel" /></Field>
+                <Field label="City" required><input name="city" required /></Field>
+                <Field label="Country" required><input name="country" required defaultValue="South Africa" /></Field>
+                <Field label="LinkedIn profile" hint="optional" full><input name="linkedin" type="url" placeholder="https://linkedin.com/in/..." /></Field>
+              </div>
+            </section>
+
+            <section>
+              <h2>2. About your business</h2>
+              <div className="grid">
+                <Field label="Business name" required><input name="businessName" required /></Field>
+                <Field label="Website" hint="optional"><input name="website" type="url" placeholder="https://" /></Field>
+                <Field label="Industry / sector" required><input name="sector" required placeholder="e.g. Fintech, Agriculture" /></Field>
+                <Field label="Year started" required><input name="yearStarted" type="number" min="1980" max="2030" required /></Field>
+                <Field label="Stage" required>
+                  <select name="stage" required defaultValue="">
+                    <option value="" disabled>Choose one</option>
+                    <option>Idea</option>
+                    <option>Building a prototype / MVP</option>
+                    <option>Launched, no revenue yet</option>
+                    <option>Early revenue</option>
+                    <option>Growing revenue</option>
+                  </select>
+                </Field>
+                <Field label="Is the business registered?" required>
+                  <select name="registered" required defaultValue="">
+                    <option value="" disabled>Choose one</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                    <option>In progress</option>
+                  </select>
+                </Field>
+                <Field label="Team size" required hint="including founders">
+                  <select name="teamSize" required defaultValue="">
+                    <option value="" disabled>Choose one</option>
+                    <option>Just me</option><option>2–5</option><option>6–20</option><option>More than 20</option>
+                  </select>
+                </Field>
+                <Field label="Revenue in the last 12 months" required>
+                  <select name="revenue" required defaultValue="">
+                    <option value="" disabled>Choose one</option>
+                    <option>None yet</option><option>Under R100k</option><option>R100k – R1m</option>
+                    <option>R1m – R10m</option><option>Over R10m</option>
+                  </select>
+                </Field>
+                <Field label="Funding raised so far" required full>
+                  <select name="funding" required defaultValue="">
+                    <option value="" disabled>Choose one</option>
+                    <option>None, self-funded</option><option>Friends & family</option><option>Grants</option>
+                    <option>Angel investment</option><option>Venture capital</option><option>Loans / debt</option>
+                  </select>
+                </Field>
+                <Field label="What does your business do?" required hint="2–3 sentences" full>
+                  <textarea name="description" required />
+                </Field>
+                <Field label="Who are your customers, and what problem do you solve for them?" required full>
+                  <textarea name="problem" required />
+                </Field>
+              </div>
+            </section>
+
+            <section>
+              <h2>3. Mentorship needs</h2>
+              <div className="grid">
+                <Field label="Where do you need help most?" required hint="tick all that apply" full>
+                  <div className="checks">
+                    {HELP_AREAS.map(a => (
+                      <label key={a} className="check">
+                        <input type="checkbox" name="helpAreas" value={a} onChange={() => setHelpError(false)} /> {a}
+                      </label>
+                    ))}
+                  </div>
+                  {helpError && <div className="error">Please tick at least one area.</div>}
+                </Field>
+                <Field label="What is the biggest challenge your business faces right now?" required full>
+                  <textarea name="challenge" required />
+                </Field>
+                <Field label="What would success look like after 6 months of mentorship?" required full>
+                  <textarea name="success" required />
+                </Field>
+                <Field label="Time you can commit each month" required>
+                  <select name="timeCommitment" required defaultValue="">
+                    <option value="" disabled>Choose one</option>
+                    <option>1–2 hours</option><option>3–5 hours</option><option>More than 5 hours</option>
+                  </select>
+                </Field>
+                <Field label="How did you hear about us?">
+                  <select name="referral" defaultValue="">
+                    <option value="">Choose one</option>
+                    <option>Social media</option><option>Friend or colleague</option><option>Event</option>
+                    <option>Partner organisation</option><option>Search engine</option><option>Other</option>
+                  </select>
+                </Field>
+              </div>
+            </section>
+
+            <section>
+              <h2>4. Consent</h2>
+              <label className="check">
+                <input type="checkbox" name="consent" required />
+                <span>I confirm the information above is accurate, and I agree that Investable Foundation may store and use it
+                  to assess my application and contact me about mentorship, in line with POPIA. <span className="req">*</span></span>
+              </label>
+              <button type="submit">Submit application</button>
+            </section>
+          </form>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
