@@ -1,5 +1,7 @@
 {
   "name": "investable-foundation",
   "compatibility_date": "2026-11-01",
-  "assets": { "directory": "./" }
+  "main": "worker.js",
+  "assets": { "directory": "./", "binding": "ASSETS", "run_worker_first": ["/api/*"] },
+  "ai": { "binding": "AI" }
 }

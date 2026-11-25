@@ -38,9 +38,9 @@
                letter-spacing: -0.03em; margin: 56px 0 16px; }
     .rail p { margin: 0; color: #c9d0dc; max-width: 30ch; }
     .steps { list-style: none; padding: 0; margin: auto 0 0; position: relative; z-index: 1; }
-    .steps a { display: flex; align-items: center; gap: 14px; padding: 10px 0; color: #c9d0dc; text-decoration: none; font-weight: 500; }
-    .steps a:hover { color: #fff; }
-    .steps a:focus-visible { outline: 2px solid var(--marigold); outline-offset: 4px; border-radius: 6px; }
+    .steps button { display: flex; align-items: center; gap: 14px; padding: 10px 0; color: #c9d0dc; text-decoration: none; font-weight: 500; }
+    .steps button:hover { color: #fff; }
+    .steps button:focus-visible { outline: 2px solid var(--marigold); outline-offset: 4px; border-radius: 6px; }
     .dot { flex: none; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #5d6680; display: grid; place-items: center;
            font-size: .8rem; font-weight: 600; transition: background .25s, border-color .25s, color .25s; }
     .steps .done { color: #fff; }
@@ -93,12 +93,43 @@
     .consent input { flex: none; width: 20px; height: 20px; margin-top: 2px; accent-color: var(--forest); }
     .consent input:focus-visible { outline: 3px solid var(--marigold); outline-offset: 2px; }
 
-    button[type=submit] { margin-top: 28px; padding: 16px 32px; border: 0; border-radius: 12px; background: var(--forest); color: #fff;
+    .primary { margin-top: 28px; padding: 16px 32px; border: 0; border-radius: 12px; background: var(--forest); color: #fff;
       font: 600 1.05rem var(--body); cursor: pointer; transition: background .15s, transform .1s; }
-    button[type=submit]:hover { background: var(--forest-deep); }
-    button[type=submit]:active { transform: translateY(1px); }
-    button[type=submit]:focus-visible { outline: 0; box-shadow: 0 0 0 4px rgba(255,189,89,.7); }
+    .primary:hover { background: var(--forest-deep); }
+    .primary:active { transform: translateY(1px); }
+    .primary:focus-visible { outline: 0; box-shadow: 0 0 0 4px rgba(255,189,89,.7); }
     .after-button { color: var(--muted); font-size: .9rem; margin-top: 12px; }
+
+    .steps button { background: none; border: 0; font: inherit; font-weight: 500; width: 100%; text-align: left; cursor: pointer; }
+    .steps button:disabled { cursor: default; opacity: .55; }
+    .steps .current { color: #fff; }
+    .steps .current .dot { border-color: var(--marigold); color: var(--marigold); }
+    .nav-row { display: flex; gap: 14px; align-items: center; margin-top: 36px; flex-wrap: wrap; }
+    .nav-row .primary { margin-top: 0; }
+    .back { padding: 14px 22px; border: 1.5px solid var(--line); border-radius: 12px; background: #fff; font: 600 1rem var(--body); color: var(--forest); cursor: pointer; }
+    .back:hover { border-color: var(--forest); }
+    .back:focus-visible { outline: 0; box-shadow: 0 0 0 4px rgba(255,189,89,.7); }
+
+    /* ---------- Chat ---------- */
+    .chat-toggle { position: fixed; right: 20px; bottom: 20px; z-index: 30; padding: 14px 22px; border: 0; border-radius: 999px; background: var(--marigold);
+      color: var(--forest-deep); font: 600 1rem var(--body); cursor: pointer; box-shadow: 0 10px 30px -8px rgba(23,27,39,.5); }
+    .chat-toggle:focus-visible, .chat-close:focus-visible, .chat-send:focus-visible, .starter:focus-visible { outline: 3px solid var(--forest); outline-offset: 2px; }
+    .chat { position: fixed; right: 20px; bottom: 20px; z-index: 31; width: min(380px, calc(100vw - 24px)); height: min(560px, calc(100vh - 40px)); display: flex; flex-direction: column;
+      background: #fff; border-radius: 18px; box-shadow: 0 24px 60px -12px rgba(23,27,39,.55); overflow: hidden; }
+    .chat-head { background: var(--forest); color: #fff; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; }
+    .chat-head b { font-family: var(--display); font-size: 1.1rem; }
+    .chat-close { background: none; border: 0; color: #fff; font-size: 1.5rem; line-height: 1; cursor: pointer; padding: 4px 8px; border-radius: 8px; }
+    .chat-log { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; background: var(--paper); }
+    .msg { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: .95rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .msg.assistant { background: #fff; border: 1px solid var(--line); align-self: flex-start; border-bottom-left-radius: 4px; }
+    .msg.user { background: var(--forest); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+    .starter { align-self: flex-start; text-align: left; background: #fff; border: 1.5px solid var(--line); border-radius: 999px; padding: 8px 14px; font: 500 .9rem var(--body); cursor: pointer; color: var(--forest); }
+    .starter:hover { border-color: var(--forest); }
+    .chat-form { display: flex; gap: 8px; padding: 12px; border-top: 1px solid var(--line); }
+    .chat-form input { flex: 1; }
+    .chat-send { border: 0; border-radius: 10px; background: var(--forest); color: #fff; font: 600 .95rem var(--body); padding: 0 16px; cursor: pointer; }
+    .chat-send:disabled { opacity: .5; cursor: default; }
+    .chat-note { font-size: .78rem; color: var(--muted); padding: 0 14px 12px; margin: 0; }
 
     /* ---------- Sent ---------- */
     .sent { max-width: 560px; padding-top: 12vh; }
@@ -169,10 +200,13 @@
       );
     }
 
+    const StepCtx = React.createContext(0);
+
     function Section({ index, lede, children }) {
       const s = SECTIONS[index];
+      const step = React.useContext(StepCtx);
       return (
-        <fieldset id={s.id}>
+        <fieldset id={s.id} hidden={index !== step}>
           <legend>{s.title} <span>{index + 1} of {SECTIONS.length}</span></legend>
           {lede && <p className="lede">{lede}</p>}
           {children}
@@ -186,7 +220,55 @@
       </svg>
     );
 
+    const STARTERS = ["Who is this mentorship for?", "What is the Mentor Circle?", "What should I write about my experience?"];
+    const CHAT_DOWN = "I can't answer right now. Please email hello@investablefoundation.org and the team will help.";
+
+    function Chat() {
+      const [open, setOpen] = React.useState(false);
+      const [msgs, setMsgs] = React.useState([]);
+      const [text, setText] = React.useState("");
+      const [busy, setBusy] = React.useState(false);
+      const endRef = React.useRef(null);
+      React.useEffect(() => { if (endRef.current) endRef.current.scrollIntoView({ block: "end" }); }, [msgs, busy, open]);
+
+      async function ask(q) {
+        q = q.trim();
+        if (!q || busy) return;
+        const next = [...msgs, { role: "user", content: q }];
+        setMsgs(next); setText(""); setBusy(true);
+        try {
+          const r = await fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ messages: next }) });
+          const d = await r.json();
+          if (!r.ok || !d.reply) throw new Error("no reply");
+          setMsgs([...next, { role: "assistant", content: d.reply }]);
+        } catch (err) {
+          setMsgs([...next, { role: "assistant", content: CHAT_DOWN }]);
+        }
+        setBusy(false);
+      }
+
+      if (!open) return <button type="button" className="chat-toggle" onClick={() => setOpen(true)}>Ask a question</button>;
+      return (
+        <div className="chat" role="dialog" aria-label="Ask a question">
+          <div className="chat-head"><b>Ask a question</b><button type="button" className="chat-close" aria-label="Close chat" onClick={() => setOpen(false)}>×</button></div>
+          <div className="chat-log" aria-live="polite">
+            <div className="msg assistant">Hi. I can answer questions about this application and about Investable Foundation while you fill in the form.</div>
+            {msgs.length === 0 && STARTERS.map(s => <button type="button" key={s} className="starter" onClick={() => ask(s)}>{s}</button>)}
+            {msgs.map((m, i) => <div key={i} className={"msg " + m.role}>{m.content}</div>)}
+            {busy && <div className="msg assistant">Thinking…</div>}
+            <div ref={endRef}></div>
+          </div>
+          <form className="chat-form" onSubmit={e => { e.preventDefault(); ask(text); }}>
+            <input type="text" value={text} onChange={e => setText(e.target.value)} maxLength={500} placeholder="Type your question" aria-label="Your question" autoFocus />
+            <button className="chat-send" disabled={busy || !text.trim()}>Send</button>
+          </form>
+          <p className="chat-note">This is an AI assistant and it can make mistakes. Check anything important with the team.</p>
+        </div>
+      );
+    }
+
     function App() {
+      const [step, setStep] = React.useState(0);
       const [sent, setSent] = React.useState(null);
       const [helpError, setHelpError] = React.useState(false);
       const [done, setDone] = React.useState(SECTIONS.map(() => false));
@@ -196,23 +278,26 @@
       function refreshProgress() {
         const form = formRef.current;
         if (!form) return;
-        setDone(SECTIONS.map(s => {
-          const fs = form.querySelector("#" + s.id);
-          const valid = [...fs.querySelectorAll("input, select, textarea")].every(el => el.checkValidity());
-          const help = s.id !== "needs" || fs.querySelector("[name=helpAreas]:checked");
-          return valid && !!help;
-        }));
+        setDone(SECTIONS.map((s, i) => stepValid(i, false)));
       }
+
+      // Is every answer on step i valid? With report=true, show the person what is missing.
+      function stepValid(i, report) {
+        const fs = formRef.current.querySelector("#" + SECTIONS[i].id);
+        const bad = [...fs.querySelectorAll("input, select, textarea")].find(el => !el.checkValidity());
+        if (bad) { if (report) bad.reportValidity(); return false; }
+        if (SECTIONS[i].id === "needs" && !fs.querySelector("[name=helpAreas]:checked")) { if (report) setHelpError(true); return false; }
+        return true;
+      }
+
+      function goTo(i) { setStep(i); window.scrollTo(0, 0); }
 
       function handleSubmit(e) {
         e.preventDefault();
+        if (!stepValid(step, true)) return;
+        if (step < SECTIONS.length - 1) { goTo(step + 1); return; }
         const data = new FormData(e.target);
         const help = data.getAll("helpAreas");
-        if (help.length === 0) {
-          setHelpError(true);
-          document.getElementById("needs").scrollIntoView();
-          return;
-        }
         const entry = Object.fromEntries(data.entries());
         entry.helpAreas = help;
         entry.submittedAt = new Date().toISOString();
@@ -222,7 +307,6 @@
         window.scrollTo(0, 0);
       }
 
-      const doneCount = done.filter(Boolean).length;
 
       return (
         <div className="layout">
@@ -234,10 +318,11 @@
               <ol className="steps">
                 {SECTIONS.map((s, i) => (
                   <li key={s.id}>
-                    <a href={"#" + s.id} className={done[i] ? "done" : ""}>
-                      <span className="dot">{done[i] ? <Tick /> : i + 1}</span>
+                    <button type="button" disabled={i > step} onClick={() => goTo(i)} aria-current={i === step ? "step" : undefined}
+                            className={(done[i] && i < step ? "done" : "") + (i === step ? " current" : "")}>
+                      <span className="dot">{done[i] && i < step ? <Tick /> : i + 1}</span>
                       {s.title}
-                    </a>
+                    </button>
                   </li>
                 ))}
               </ol>
@@ -255,11 +340,12 @@
           ) : (
             <main className="main">
               <div className="mobile-progress" aria-hidden="true">
-                <div className="segs">{done.map((d, i) => <i key={i} className={d ? "on" : ""}></i>)}</div>
-                {doneCount} of {SECTIONS.length} done
+                <div className="segs">{SECTIONS.map((s, i) => <i key={i} className={i <= step ? "on" : ""}></i>)}</div>
+                Step {step + 1} of {SECTIONS.length}
               </div>
 
-              <form ref={formRef} onSubmit={handleSubmit} onInput={refreshProgress} onChange={refreshProgress}>
+              <form ref={formRef} noValidate onSubmit={handleSubmit} onInput={refreshProgress} onChange={refreshProgress}>
+                <StepCtx.Provider value={step}>
                 <p className="intro">This takes about 15 minutes. Questions marked <b>*</b> need an answer.</p>
 
                 <Section index={0}>
@@ -372,12 +458,20 @@
                     <span>I confirm this information is accurate. I agree that Investable Foundation may store and use it to assess
                       my application and contact me about mentorship, in line with POPIA. <span className="req">*</span></span>
                   </label>
-                  <button type="submit">Send application</button>
-                  <p className="after-button">We read every application and reply by email.</p>
                 </Section>
+                </StepCtx.Provider>
+
+                <div className="nav-row">
+                  {step > 0 && <button type="button" className="back" onClick={() => goTo(step - 1)}>Back</button>}
+                  <button type="submit" className="primary">
+                    {step < SECTIONS.length - 1 ? "Next: " + SECTIONS[step + 1].title : "Send application"}
+                  </button>
+                </div>
+                {step === SECTIONS.length - 1 && <p className="after-button">We read every application and reply by email.</p>}
               </form>
             </main>
           )}
+          {!sent && <Chat />}
         </div>
       );
     }
