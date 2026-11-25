@@ -344,3 +344,6 @@ html .band-navy .items li:hover { background: var(--gold); color: var(--navy-dee
   .faces { grid-template-columns: 1fr 1fr; }
 }
 @media (prefers-reduced-motion: reduce) { .ticker div, .player i { animation: none; } }
+.nums b { font-size: clamp(2.6rem, 6vw, 5.4rem); }
+.items li { background: var(--mist); }
+.band-mist .items li { background: #fff; }
