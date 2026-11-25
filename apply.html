@@ -6,20 +6,20 @@
   <title>Apply for Mentorship | Investable Foundation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --forest: #0f3d2e;      /* rail, headings, primary button */
-      --forest-deep: #0a2b20;
-      --marigold: #f2b632;    /* progress, focus, completed ticks */
+      --forest: #232838;      /* rail, headings, primary button */
+      --forest-deep: #171b27;
+      --marigold: #ffbd59;    /* progress, focus, completed ticks */
       --paper: #fbfcfa;
-      --ink: #14201b;
-      --muted: #5c6b63;
-      --line: #d5ddd7;
-      --mist: #eef3ef;
+      --ink: #1b1f2b;
+      --muted: #596273;
+      --line: #c8cfdb;
+      --mist: #e9edf4;
       --danger: #b3261e;
       --display: "Bricolage Grotesque", system-ui, sans-serif;
-      --body: "Figtree", system-ui, sans-serif;
+      --body: "DM Sans", system-ui, sans-serif;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -36,12 +36,12 @@
     .brand i { width: 12px; height: 12px; border-radius: 50%; background: var(--marigold); display: inline-block; }
     .rail h1 { font-family: var(--display); font-weight: 700; font-size: clamp(2rem, 3.2vw, 2.75rem); line-height: 1.05;
                letter-spacing: -0.03em; margin: 56px 0 16px; }
-    .rail p { margin: 0; color: #c9d8cf; max-width: 30ch; }
+    .rail p { margin: 0; color: #c9d0dc; max-width: 30ch; }
     .steps { list-style: none; padding: 0; margin: auto 0 0; position: relative; z-index: 1; }
-    .steps a { display: flex; align-items: center; gap: 14px; padding: 10px 0; color: #c9d8cf; text-decoration: none; font-weight: 500; }
+    .steps a { display: flex; align-items: center; gap: 14px; padding: 10px 0; color: #c9d0dc; text-decoration: none; font-weight: 500; }
     .steps a:hover { color: #fff; }
     .steps a:focus-visible { outline: 2px solid var(--marigold); outline-offset: 4px; border-radius: 6px; }
-    .dot { flex: none; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #5d8573; display: grid; place-items: center;
+    .dot { flex: none; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #5d6680; display: grid; place-items: center;
            font-size: .8rem; font-weight: 600; transition: background .25s, border-color .25s, color .25s; }
     .steps .done { color: #fff; }
     .steps .done .dot { background: var(--marigold); border-color: var(--marigold); color: var(--forest-deep); }
@@ -73,11 +73,11 @@
       transition: border-color .15s, box-shadow .15s; }
     textarea { min-height: 112px; resize: vertical; }
     select { appearance: none; padding-right: 40px; background-repeat: no-repeat; background-position: right 14px center;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%230f3d2e' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E"); }
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%23232838' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E"); }
     select:invalid { color: var(--muted); }
-    input:hover, select:hover, textarea:hover { border-color: #a9b8ae; }
-    input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--forest); box-shadow: 0 0 0 4px rgba(242,182,50,.45); }
-    ::placeholder { color: #94a199; }
+    input:hover, select:hover, textarea:hover { border-color: #a4adbd; }
+    input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--forest); box-shadow: 0 0 0 4px rgba(255,189,89,.45); }
+    ::placeholder { color: #97a0b0; }
 
     /* Help-area chips */
     .chips { display: flex; flex-wrap: wrap; gap: 10px; }
@@ -86,7 +86,7 @@
     .chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
     .chip:hover { border-color: var(--forest); }
     .chip:has(input:checked) { background: var(--forest); border-color: var(--forest); color: #fff; }
-    .chip:has(input:focus-visible) { box-shadow: 0 0 0 4px rgba(242,182,50,.45); }
+    .chip:has(input:focus-visible) { box-shadow: 0 0 0 4px rgba(255,189,89,.45); }
     .error { color: var(--danger); font-size: .9rem; margin-top: 8px; font-weight: 500; }
 
     .consent { display: flex; gap: 12px; align-items: flex-start; margin-top: 24px; padding: 18px; background: var(--mist); border-radius: 12px; }
@@ -97,7 +97,7 @@
       font: 600 1.05rem var(--body); cursor: pointer; transition: background .15s, transform .1s; }
     button[type=submit]:hover { background: var(--forest-deep); }
     button[type=submit]:active { transform: translateY(1px); }
-    button[type=submit]:focus-visible { outline: 0; box-shadow: 0 0 0 4px rgba(242,182,50,.7); }
+    button[type=submit]:focus-visible { outline: 0; box-shadow: 0 0 0 4px rgba(255,189,89,.7); }
     .after-button { color: var(--muted); font-size: .9rem; margin-top: 12px; }
 
     /* ---------- Sent ---------- */
@@ -180,7 +180,7 @@
       );
     }
 
-    const Tick = ({ size = 14, stroke = "#0a2b20" }) => (
+    const Tick = ({ size = 14, stroke = "#171b27" }) => (
       <svg width={size} height={size} viewBox="0 0 14 14" fill="none" stroke={stroke} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <path d="M2.5 7.5l3 3 6-7" />
       </svg>
@@ -227,7 +227,7 @@
       return (
         <div className="layout">
           <aside className="rail">
-            <div className="brand"><i></i>Investable Foundation</div>
+            <a href="/"><img src="https://investablefoundation.org/assets/logo-inverted-web.png" alt="Investable Foundation NPC" height="48" /></a>
             <h1>Apply for mentorship</h1>
             <p>Tell us where you and your business are today. We'll use it to match you with a mentor who has been there.</p>
             {!sent && (
