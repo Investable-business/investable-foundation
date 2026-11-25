@@ -131,6 +131,33 @@
     .chat-send:disabled { opacity: .5; cursor: default; }
     .chat-note { font-size: .78rem; color: var(--muted); padding: 0 14px 12px; margin: 0; }
 
+    /* ---------- v2: livelier ---------- */
+    .rail { background: radial-gradient(120% 80% at 100% 110%, #3b3a55 0%, var(--forest) 50%, var(--forest-deep) 100%); }
+    /* The gold sun rises a little with every step. */
+    .rail::after { border: 0; background: var(--marigold); width: 260px; height: 260px; right: -110px; bottom: -230px;
+                   transform: translateY(calc(var(--step, 0) * -25px)); transition: transform .8s cubic-bezier(.2,.8,.2,1); }
+    .bar { height: 8px; border-radius: 99px; background: var(--mist); overflow: hidden; margin-bottom: 36px; }
+    .bar i { display: block; height: 100%; border-radius: 99px; background: var(--marigold); transition: width .6s cubic-bezier(.2,.8,.2,1); }
+    .prompt { font: 800 clamp(2.2rem, 4.6vw, 3.8rem) var(--display); letter-spacing: -0.04em; line-height: 1; color: var(--forest); margin: 0 0 14px; }
+    .prompt, fieldset:not([hidden]) { animation: stepIn .55s cubic-bezier(.2,.8,.2,1) both; }
+    fieldset:not([hidden]) { animation-delay: .08s; }
+    @keyframes stepIn { from { opacity: 0; transform: translateX(48px); } }
+    input[type=text], input[type=email], input[type=tel], input[type=url], input[type=number], select, textarea { padding: 14px 16px; border-radius: 14px; }
+    .chip { padding: 12px 20px; transition: background .15s, border-color .15s, color .15s, transform .2s cubic-bezier(.3,1.7,.5,1); }
+    .chip:hover { transform: translateY(-3px); }
+    .chip:has(input:checked) { background: var(--marigold); border-color: var(--marigold); color: var(--forest-deep); transform: scale(1.05); }
+    .primary { border-radius: 999px; transition: background .2s, color .2s, transform .2s; }
+    .primary::after { content: "→"; display: inline-block; margin-left: 10px; transition: transform .2s; }
+    .primary:hover { background: var(--marigold); color: var(--forest-deep); transform: translateY(-3px); }
+    .primary:hover::after { transform: translateX(6px); }
+    .back { border-radius: 999px; }
+    .chat-toggle { animation: nudge 5s 3s infinite; }
+    @keyframes nudge { 0%, 88%, 100% { transform: none; } 92% { transform: translateY(-8px) rotate(-3deg); } 96% { transform: translateY(0) rotate(2deg); } }
+    .sent .tick { animation: pop .7s cubic-bezier(.3,1.7,.5,1) both; }
+    .sent h2, .sent p { animation: stepIn .6s .25s both; }
+    @keyframes pop { from { transform: scale(0); } }
+    @media (prefers-reduced-motion: reduce) { *, *::after { animation: none !important; transition: none !important; } }
+
     /* ---------- Sent ---------- */
     .sent { max-width: 560px; padding-top: 12vh; }
     .sent .tick { width: 64px; height: 64px; border-radius: 50%; background: var(--marigold); display: grid; place-items: center; }
@@ -267,6 +294,8 @@
       );
     }
 
+    const PROMPTS = ["First, who are you?", "What's your story so far?", "Tell us about your business.", "Where do you need a hand?", "Almost there."];
+
     function App() {
       const [step, setStep] = React.useState(0);
       const [sent, setSent] = React.useState(null);
@@ -310,7 +339,7 @@
 
       return (
         <div className="layout">
-          <aside className="rail">
+          <aside className="rail" style={{ "--step": sent ? 6 : step }}>
             <a href="/"><img src="https://investablefoundation.org/assets/logo-inverted-web.png" alt="Investable Foundation NPC" height="48" /></a>
             <h1>Apply for mentorship</h1>
             <p>Tell us where you and your business are today. We'll use it to match you with a mentor who has been there.</p>
@@ -346,6 +375,8 @@
 
               <form ref={formRef} noValidate onSubmit={handleSubmit} onInput={refreshProgress} onChange={refreshProgress}>
                 <StepCtx.Provider value={step}>
+                <div className="bar" aria-hidden="true"><i style={{ width: ((step + 1) / SECTIONS.length * 100) + "%" }}></i></div>
+                <p className="prompt" key={step} aria-hidden="true">{PROMPTS[step]}</p>
                 <p className="intro">This takes about 15 minutes. Questions marked <b>*</b> need an answer.</p>
 
                 <Section index={0}>

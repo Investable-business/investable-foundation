@@ -75,3 +75,81 @@ tabs.forEach((t, i) => {
 // Home: LeaderEx seats. 12 planned, 36 came.
 const seats = document.getElementById('seats');
 if (seats) seats.innerHTML = Array.from({ length: 36 }, (_, i) => `<i class="${i < 12 ? 'planned' : ''}"></i>`).join('');
+
+// ---------- v2: faces, ticker, video and movement ----------
+const TEAM = [
+  ['keshni', 'Keshni Morar', 'CEO and Executive Director', 'https://linkedin.com/in/keshni-morar'],
+  ['johann', 'Johann Ungerer', 'CTO', 'https://www.linkedin.com/in/johannungerer/'],
+  ['pommie', 'Pommie Lutchman', 'Entrepreneur in Residence', 'https://www.linkedin.com/in/pommielutchman/'],
+  ['maushami', 'Maushami Chetty', 'Lawyer', 'https://www.linkedin.com/in/maushami-chetty-03529b60/'],
+  ['ashlin', 'Ashlin Govender', 'Sales Strategy and GTM', 'https://www.linkedin.com/in/ashlingovender30/'],
+  ['lily', 'Lily Makaleng', 'Programme Manager and Success Manager', 'https://www.linkedin.com/in/lilymakaleng/'],
+  ['john', 'John Zabula', 'Success Manager', 'https://www.linkedin.com/in/john-zabula/'],
+  ['victoria', 'Victoria Odimba', 'Success Manager and Social Media Manager', 'https://www.linkedin.com/in/victoriaodimba/'],
+];
+const photo = id => `${REAL}/assets/team-${id}.jpg`;
+const team = document.getElementById('team');
+if (team) team.innerHTML = TEAM.map(([id, name, role, link]) =>
+  `<li><figure><img src="${photo(id)}" alt="${name}" loading="lazy" /></figure><b>${name}</b><span>${role}</span><a href="${link}">LinkedIn</a></li>`).join('');
+const mini = document.getElementById('faces-mini');
+if (mini) mini.innerHTML = TEAM.slice(0, 5).map(([id]) => `<img src="${photo(id)}" alt="" />`).join('');
+
+// Ticker under the hero: countries on the home page, track record everywhere else.
+const hero = document.querySelector('.hero');
+if (hero) {
+  const words = hero.classList.contains('inner')
+    ? ['Delivering since 2020', '9 cohorts', '300+ founders supported', '90+ alumni', '150+ mentors', '13 African countries']
+    : ['South Africa', 'Angola', 'Botswana', 'Egypt', 'Kenya', 'Mauritania', 'Mauritius', 'Mozambique', 'Nigeria', 'Rwanda', 'Tanzania', 'Tunisia', 'Uganda'];
+  const run = words.map(w => `<span>${w}</span>`).join('');
+  hero.insertAdjacentHTML('afterend', `<div class="ticker" aria-hidden="true"><div>${run}${run}${run}${run}</div></div>`);
+}
+
+// Video: load YouTube only when someone presses play.
+const player = document.querySelector('.player');
+if (player) player.addEventListener('click', () => {
+  player.outerHTML = `<div class="player"><iframe style="opacity:1" src="https://www.youtube-nocookie.com/embed/${player.dataset.video}?autoplay=1" title="Demo Day video" allow="autoplay; encrypted-media; fullscreen" allowfullscreen></iframe></div>`;
+});
+
+if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+  document.documentElement.classList.add('motion');
+
+  // Home headline cycles through the three pathways.
+  const swaps = [...document.querySelectorAll('.swap')];
+  let turn = 0;
+  if (swaps.length) setInterval(() => {
+    turn++;
+    swaps.forEach(s => {
+      const w = s.dataset.words.split('|');
+      s.textContent = w[turn % w.length];
+      s.classList.remove('go'); void s.offsetWidth; s.classList.add('go');
+    });
+  }, 2800);
+
+  // Numbers count up from zero the first time they are seen.
+  function countUp(el) {
+    const m = el.textContent.match(/^(\d+)(.*)$/);
+    if (!m || +m[1] > 1000) return; // leave years alone
+    const end = +m[1], t0 = performance.now();
+    (function tick(t) {
+      const p = Math.min((t - t0) / 1400, 1);
+      el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3))) + m[2];
+      if (p < 1) requestAnimationFrame(tick);
+    })(t0);
+  }
+
+  // Things slide in as you scroll to them.
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    io.unobserve(e.target);
+    const el = e.target;
+    if (el.matches('.stats b, .nums b')) return countUp(el);
+    const i = [...el.parentNode.children].indexOf(el);
+    const wait = el.matches('.seats') ? 0 : Math.min(i, 6) * 90;
+    setTimeout(() => el.classList.add('in'), wait);
+    // Drop the reveal classes afterwards so hover effects take over.
+    if (el.matches('.rv')) setTimeout(() => el.classList.remove('rv', 'in'), wait + 900);
+  }), { threshold: 0.15 });
+  document.querySelectorAll('section .wrap > *, .items > li, .trio > a, .faces > li, .nums > div, .way').forEach(el => { el.classList.add('rv'); io.observe(el); });
+  document.querySelectorAll('.stats b, .nums b, .seats').forEach(el => io.observe(el));
+  document.querySelectorAll('.seats i').forEach((el, i) => el.style.setProperty('--i', i < 12 ? i : i + 8));
+}
