@@ -3,34 +3,127 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Apply for Mentorship · Investable Foundation</title>
+  <title>Apply for Mentorship | Investable Foundation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    :root { --bg:#f6f7f9; --card:#fff; --text:#1a1a1a; --muted:#5b6270; --line:#dde1e7; --accent:#1a1a1a; --ok:#17663a; --okbg:#e6f6ec; }
+    :root {
+      --forest: #0f3d2e;      /* rail, headings, primary button */
+      --forest-deep: #0a2b20;
+      --marigold: #f2b632;    /* progress, focus, completed ticks */
+      --paper: #fbfcfa;
+      --ink: #14201b;
+      --muted: #5c6b63;
+      --line: #d5ddd7;
+      --mist: #eef3ef;
+      --danger: #b3261e;
+      --display: "Bricolage Grotesque", system-ui, sans-serif;
+      --body: "Figtree", system-ui, sans-serif;
+    }
     * { box-sizing: border-box; }
-    body { margin:0; font-family: system-ui, -apple-system, sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
-    .wrap { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
-    header h1 { margin: 0 0 8px; font-size: 1.75rem; }
-    header p { margin: 0; color: var(--muted); }
-    section { background:var(--card); border-radius:16px; padding:24px; margin-top:20px; box-shadow:0 2px 12px rgba(0,0,0,.05); }
-    section h2 { margin:0 0 16px; font-size:1.1rem; }
-    .grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: var(--body); color: var(--ink); background: var(--paper); line-height: 1.55; font-size: 16px; }
+
+    .layout { display: grid; grid-template-columns: minmax(320px, 400px) 1fr; min-height: 100vh; }
+
+    /* ---------- Rail ---------- */
+    .rail { background: var(--forest); color: #fff; padding: 48px 40px; position: sticky; top: 0; height: 100vh;
+            display: flex; flex-direction: column; overflow: hidden; }
+    .rail::after { content: ""; position: absolute; right: -140px; bottom: -140px; width: 380px; height: 380px;
+                   border-radius: 50%; border: 56px solid var(--forest-deep); pointer-events: none; }
+    .brand { font-family: var(--display); font-weight: 700; font-size: 1.05rem; letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px; }
+    .brand i { width: 12px; height: 12px; border-radius: 50%; background: var(--marigold); display: inline-block; }
+    .rail h1 { font-family: var(--display); font-weight: 700; font-size: clamp(2rem, 3.2vw, 2.75rem); line-height: 1.05;
+               letter-spacing: -0.03em; margin: 56px 0 16px; }
+    .rail p { margin: 0; color: #c9d8cf; max-width: 30ch; }
+    .steps { list-style: none; padding: 0; margin: auto 0 0; position: relative; z-index: 1; }
+    .steps a { display: flex; align-items: center; gap: 14px; padding: 10px 0; color: #c9d8cf; text-decoration: none; font-weight: 500; }
+    .steps a:hover { color: #fff; }
+    .steps a:focus-visible { outline: 2px solid var(--marigold); outline-offset: 4px; border-radius: 6px; }
+    .dot { flex: none; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #5d8573; display: grid; place-items: center;
+           font-size: .8rem; font-weight: 600; transition: background .25s, border-color .25s, color .25s; }
+    .steps .done { color: #fff; }
+    .steps .done .dot { background: var(--marigold); border-color: var(--marigold); color: var(--forest-deep); }
+
+    /* ---------- Mobile progress ---------- */
+    .mobile-progress { display: none; }
+
+    /* ---------- Form ---------- */
+    .main { padding: 64px clamp(20px, 6vw, 88px) 96px; }
+    form { max-width: 680px; }
+    .intro { color: var(--muted); max-width: 60ch; margin: 0 0 8px; }
+    .intro b { color: var(--danger); }
+
+    fieldset { border: 0; padding: 0; margin: 56px 0 0; min-width: 0; scroll-margin-top: 32px; }
+    fieldset:first-of-type { margin-top: 40px; }
+    legend { padding: 0; font-family: var(--display); font-weight: 700; font-size: 1.6rem; letter-spacing: -0.02em; color: var(--forest);
+             display: flex; align-items: baseline; gap: 12px; }
+    legend span { font-size: 1rem; font-weight: 500; color: var(--muted); }
+    .lede { color: var(--muted); margin: 6px 0 0; max-width: 60ch; }
+
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 24px; }
     .full { grid-column: 1 / -1; }
+    label.field-label { display: block; font-weight: 600; font-size: .95rem; margin-bottom: 6px; }
+    .req { color: var(--danger); }
+    .hint { font-weight: 400; color: var(--muted); font-size: .88rem; }
+
+    input[type=text], input[type=email], input[type=tel], input[type=url], input[type=number], select, textarea {
+      width: 100%; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 10px; font: inherit; color: inherit; background: #fff;
+      transition: border-color .15s, box-shadow .15s; }
+    textarea { min-height: 112px; resize: vertical; }
+    select { appearance: none; padding-right: 40px; background-repeat: no-repeat; background-position: right 14px center;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none' stroke='%230f3d2e' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M1 1.5l5 5 5-5'/%3E%3C/svg%3E"); }
+    select:invalid { color: var(--muted); }
+    input:hover, select:hover, textarea:hover { border-color: #a9b8ae; }
+    input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--forest); box-shadow: 0 0 0 4px rgba(242,182,50,.45); }
+    ::placeholder { color: #94a199; }
+
+    /* Help-area chips */
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; }
+    .chip { position: relative; display: inline-flex; align-items: center; padding: 9px 16px; border: 1.5px solid var(--line); border-radius: 999px;
+            background: #fff; cursor: pointer; font-weight: 500; font-size: .95rem; user-select: none; transition: background .15s, border-color .15s, color .15s; }
+    .chip input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+    .chip:hover { border-color: var(--forest); }
+    .chip:has(input:checked) { background: var(--forest); border-color: var(--forest); color: #fff; }
+    .chip:has(input:focus-visible) { box-shadow: 0 0 0 4px rgba(242,182,50,.45); }
+    .error { color: var(--danger); font-size: .9rem; margin-top: 8px; font-weight: 500; }
+
+    .consent { display: flex; gap: 12px; align-items: flex-start; margin-top: 24px; padding: 18px; background: var(--mist); border-radius: 12px; }
+    .consent input { flex: none; width: 20px; height: 20px; margin-top: 2px; accent-color: var(--forest); }
+    .consent input:focus-visible { outline: 3px solid var(--marigold); outline-offset: 2px; }
+
+    button[type=submit] { margin-top: 28px; padding: 16px 32px; border: 0; border-radius: 12px; background: var(--forest); color: #fff;
+      font: 600 1.05rem var(--body); cursor: pointer; transition: background .15s, transform .1s; }
+    button[type=submit]:hover { background: var(--forest-deep); }
+    button[type=submit]:active { transform: translateY(1px); }
+    button[type=submit]:focus-visible { outline: 0; box-shadow: 0 0 0 4px rgba(242,182,50,.7); }
+    .after-button { color: var(--muted); font-size: .9rem; margin-top: 12px; }
+
+    /* ---------- Sent ---------- */
+    .sent { max-width: 560px; padding-top: 12vh; }
+    .sent .tick { width: 64px; height: 64px; border-radius: 50%; background: var(--marigold); display: grid; place-items: center; }
+    .sent h2 { font-family: var(--display); font-size: clamp(2rem, 4vw, 2.75rem); letter-spacing: -0.03em; line-height: 1.05; color: var(--forest); margin: 28px 0 12px; }
+    .sent p { color: var(--muted); margin: 0 0 12px; }
+    .sent p strong { color: var(--ink); }
+
+    /* ---------- Small screens ---------- */
+    @media (max-width: 900px) {
+      .layout { display: block; }
+      .rail { position: relative; height: auto; padding: 32px 20px 40px; }
+      .rail::after { right: -120px; bottom: -200px; }
+      .rail h1 { margin-top: 32px; }
+      .steps { display: none; }
+      .mobile-progress { display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 5; background: var(--paper);
+                         padding: 12px 20px; border-bottom: 1px solid var(--line); font-size: .88rem; font-weight: 600; color: var(--forest); }
+      .segs { display: flex; gap: 4px; flex: 1; }
+      .segs i { height: 6px; flex: 1; border-radius: 3px; background: var(--line); transition: background .25s; }
+      .segs i.on { background: var(--marigold); }
+      .main { padding-top: 32px; }
+      fieldset { scroll-margin-top: 64px; }
+    }
     @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
-    label { display:block; font-weight:600; font-size:.92rem; margin-bottom:6px; }
-    .req { color:#b42318; }
-    .hint { font-weight:400; color:var(--muted); font-size:.85rem; }
-    input, select, textarea { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:8px; font:inherit; background:#fff; color:inherit; }
-    textarea { min-height:100px; resize:vertical; }
-    input:focus, select:focus, textarea:focus { outline:2px solid #4c7cf0; outline-offset:1px; border-color:transparent; }
-    .checks { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
-    @media (max-width: 600px) { .checks { grid-template-columns: 1fr; } }
-    .check { display:flex; gap:10px; align-items:flex-start; font-weight:400; margin:0; }
-    .check input { width:auto; margin-top:4px; }
-    .error { color:#b42318; font-size:.85rem; margin-top:6px; }
-    button { margin-top:24px; width:100%; padding:14px; border:0; border-radius:10px; background:var(--accent); color:#fff; font-size:1rem; font-weight:600; cursor:pointer; }
-    .done { text-align:center; }
-    .done .tick { font-size:3rem; }
-    .done .badge { display:inline-block; margin-top:12px; padding:8px 14px; border-radius:8px; background:var(--okbg); color:var(--ok); font-weight:600; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } html { scroll-behavior: auto; } }
   </style>
 </head>
 <body>
@@ -41,16 +134,24 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"></script>
 
   <script type="text/babel">
+    const SECTIONS = [
+      { id: "you", title: "About you" },
+      { id: "background", title: "Education and experience" },
+      { id: "business", title: "Your business" },
+      { id: "needs", title: "Mentorship needs" },
+      { id: "consent", title: "Consent" },
+    ];
+
     const HELP_AREAS = [
-      "Fundraising & investor readiness", "Business strategy", "Product development",
-      "Sales & marketing", "Finance & financial modelling", "Legal & compliance",
-      "Operations & hiring", "Leadership & personal growth",
+      "Fundraising and investor readiness", "Business strategy", "Product development",
+      "Sales and marketing", "Finance and financial modelling", "Legal and compliance",
+      "Operations and hiring", "Leadership and personal growth",
     ];
 
     function Field({ label, required, hint, full, children }) {
       return (
         <div className={full ? "full" : ""}>
-          <label>
+          <label className="field-label">
             {label} {required && <span className="req">*</span>}
             {hint && <span className="hint"> ({hint})</span>}
           </label>
@@ -59,159 +160,224 @@
       );
     }
 
+    function Select({ name, options, required = true }) {
+      return (
+        <select name={name} required={required} defaultValue="">
+          <option value="" disabled={required}>Choose one</option>
+          {options.map(o => <option key={o}>{o}</option>)}
+        </select>
+      );
+    }
+
+    function Section({ index, lede, children }) {
+      const s = SECTIONS[index];
+      return (
+        <fieldset id={s.id}>
+          <legend>{s.title} <span>{index + 1} of {SECTIONS.length}</span></legend>
+          {lede && <p className="lede">{lede}</p>}
+          {children}
+        </fieldset>
+      );
+    }
+
+    const Tick = ({ size = 14, stroke = "#0a2b20" }) => (
+      <svg width={size} height={size} viewBox="0 0 14 14" fill="none" stroke={stroke} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M2.5 7.5l3 3 6-7" />
+      </svg>
+    );
+
     function App() {
-      const [submitted, setSubmitted] = React.useState(null);
+      const [sent, setSent] = React.useState(null);
       const [helpError, setHelpError] = React.useState(false);
+      const [done, setDone] = React.useState(SECTIONS.map(() => false));
+      const formRef = React.useRef(null);
+
+      // A section is complete when every field in it is valid (and at least one help area is ticked).
+      function refreshProgress() {
+        const form = formRef.current;
+        if (!form) return;
+        setDone(SECTIONS.map(s => {
+          const fs = form.querySelector("#" + s.id);
+          const valid = [...fs.querySelectorAll("input, select, textarea")].every(el => el.checkValidity());
+          const help = s.id !== "needs" || fs.querySelector("[name=helpAreas]:checked");
+          return valid && !!help;
+        }));
+      }
 
       function handleSubmit(e) {
         e.preventDefault();
         const data = new FormData(e.target);
         const help = data.getAll("helpAreas");
-        if (help.length === 0) { setHelpError(true); return; }
+        if (help.length === 0) {
+          setHelpError(true);
+          document.getElementById("needs").scrollIntoView();
+          return;
+        }
         const entry = Object.fromEntries(data.entries());
         entry.helpAreas = help;
         entry.submittedAt = new Date().toISOString();
         // ponytail: not saved anywhere yet. Send `entry` to the database once it's connected.
         console.log("Application", entry);
-        setSubmitted(entry);
+        setSent(entry);
         window.scrollTo(0, 0);
       }
 
-      if (submitted) {
-        return (
-          <div className="wrap">
-            <section className="done">
-              <div className="tick">🎉</div>
-              <h1>Thank you, {submitted.fullName.split(" ")[0]}!</h1>
-              <p>Your application for <strong>{submitted.businessName}</strong> has been received.
-                 Our team will review it and be in touch at {submitted.email}.</p>
-              <div className="badge">Application submitted</div>
-            </section>
-          </div>
-        );
-      }
+      const doneCount = done.filter(Boolean).length;
 
       return (
-        <div className="wrap">
-          <header>
-            <h1>Apply for Mentorship</h1>
-            <p>Tell us about you and your business. We use this to assess how our mentors can best support you.
-               It takes about 10 minutes. Fields marked <span className="req">*</span> are required.</p>
-          </header>
+        <div className="layout">
+          <aside className="rail">
+            <div className="brand"><i></i>Investable Foundation</div>
+            <h1>Apply for mentorship</h1>
+            <p>Tell us where you and your business are today. We'll use it to match you with a mentor who has been there.</p>
+            {!sent && (
+              <ol className="steps">
+                {SECTIONS.map((s, i) => (
+                  <li key={s.id}>
+                    <a href={"#" + s.id} className={done[i] ? "done" : ""}>
+                      <span className="dot">{done[i] ? <Tick /> : i + 1}</span>
+                      {s.title}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </aside>
 
-          <form onSubmit={handleSubmit}>
-            <section>
-              <h2>1. About you</h2>
-              <div className="grid">
-                <Field label="Full name" required><input name="fullName" required autoComplete="name" /></Field>
-                <Field label="Your role" required hint="e.g. CEO, co-founder"><input name="role" required /></Field>
-                <Field label="Email" required><input name="email" type="email" required autoComplete="email" /></Field>
-                <Field label="Phone number" required><input name="phone" type="tel" required autoComplete="tel" /></Field>
-                <Field label="City" required><input name="city" required /></Field>
-                <Field label="Country" required><input name="country" required defaultValue="South Africa" /></Field>
-                <Field label="LinkedIn profile" hint="optional" full><input name="linkedin" type="url" placeholder="https://linkedin.com/in/..." /></Field>
+          {sent ? (
+            <main className="main">
+              <div className="sent">
+                <div className="tick"><Tick size={28} /></div>
+                <h2>Application sent. Thank you, {sent.fullName.trim().split(" ")[0]}.</h2>
+                <p>We have your application for <strong>{sent.businessName}</strong>. Our team reads every application and will reply to <strong>{sent.email}</strong>.</p>
               </div>
-            </section>
-
-            <section>
-              <h2>2. About your business</h2>
-              <div className="grid">
-                <Field label="Business name" required><input name="businessName" required /></Field>
-                <Field label="Website" hint="optional"><input name="website" type="url" placeholder="https://" /></Field>
-                <Field label="Industry / sector" required><input name="sector" required placeholder="e.g. Fintech, Agriculture" /></Field>
-                <Field label="Year started" required><input name="yearStarted" type="number" min="1980" max="2030" required /></Field>
-                <Field label="Stage" required>
-                  <select name="stage" required defaultValue="">
-                    <option value="" disabled>Choose one</option>
-                    <option>Idea</option>
-                    <option>Building a prototype / MVP</option>
-                    <option>Launched, no revenue yet</option>
-                    <option>Early revenue</option>
-                    <option>Growing revenue</option>
-                  </select>
-                </Field>
-                <Field label="Is the business registered?" required>
-                  <select name="registered" required defaultValue="">
-                    <option value="" disabled>Choose one</option>
-                    <option>Yes</option>
-                    <option>No</option>
-                    <option>In progress</option>
-                  </select>
-                </Field>
-                <Field label="Team size" required hint="including founders">
-                  <select name="teamSize" required defaultValue="">
-                    <option value="" disabled>Choose one</option>
-                    <option>Just me</option><option>2–5</option><option>6–20</option><option>More than 20</option>
-                  </select>
-                </Field>
-                <Field label="Revenue in the last 12 months" required>
-                  <select name="revenue" required defaultValue="">
-                    <option value="" disabled>Choose one</option>
-                    <option>None yet</option><option>Under R100k</option><option>R100k – R1m</option>
-                    <option>R1m – R10m</option><option>Over R10m</option>
-                  </select>
-                </Field>
-                <Field label="Funding raised so far" required full>
-                  <select name="funding" required defaultValue="">
-                    <option value="" disabled>Choose one</option>
-                    <option>None, self-funded</option><option>Friends & family</option><option>Grants</option>
-                    <option>Angel investment</option><option>Venture capital</option><option>Loans / debt</option>
-                  </select>
-                </Field>
-                <Field label="What does your business do?" required hint="2–3 sentences" full>
-                  <textarea name="description" required />
-                </Field>
-                <Field label="Who are your customers, and what problem do you solve for them?" required full>
-                  <textarea name="problem" required />
-                </Field>
+            </main>
+          ) : (
+            <main className="main">
+              <div className="mobile-progress" aria-hidden="true">
+                <div className="segs">{done.map((d, i) => <i key={i} className={d ? "on" : ""}></i>)}</div>
+                {doneCount} of {SECTIONS.length} done
               </div>
-            </section>
 
-            <section>
-              <h2>3. Mentorship needs</h2>
-              <div className="grid">
-                <Field label="Where do you need help most?" required hint="tick all that apply" full>
-                  <div className="checks">
-                    {HELP_AREAS.map(a => (
-                      <label key={a} className="check">
-                        <input type="checkbox" name="helpAreas" value={a} onChange={() => setHelpError(false)} /> {a}
-                      </label>
-                    ))}
+              <form ref={formRef} onSubmit={handleSubmit} onInput={refreshProgress} onChange={refreshProgress}>
+                <p className="intro">This takes about 15 minutes. Questions marked <b>*</b> need an answer.</p>
+
+                <Section index={0}>
+                  <div className="grid">
+                    <Field label="Full name" required><input type="text" name="fullName" required autoComplete="name" /></Field>
+                    <Field label="Your role in the business" required><input type="text" name="role" required placeholder="e.g. CEO, co-founder" /></Field>
+                    <Field label="Email" required><input type="email" name="email" required autoComplete="email" /></Field>
+                    <Field label="Phone number" required><input type="tel" name="phone" required autoComplete="tel" /></Field>
+                    <Field label="City" required><input type="text" name="city" required /></Field>
+                    <Field label="Country" required><input type="text" name="country" required defaultValue="South Africa" /></Field>
+                    <Field label="LinkedIn profile" hint="optional" full><input type="url" name="linkedin" placeholder="https://linkedin.com/in/..." /></Field>
                   </div>
-                  {helpError && <div className="error">Please tick at least one area.</div>}
-                </Field>
-                <Field label="What is the biggest challenge your business faces right now?" required full>
-                  <textarea name="challenge" required />
-                </Field>
-                <Field label="What would success look like after 6 months of mentorship?" required full>
-                  <textarea name="success" required />
-                </Field>
-                <Field label="Time you can commit each month" required>
-                  <select name="timeCommitment" required defaultValue="">
-                    <option value="" disabled>Choose one</option>
-                    <option>1–2 hours</option><option>3–5 hours</option><option>More than 5 hours</option>
-                  </select>
-                </Field>
-                <Field label="How did you hear about us?">
-                  <select name="referral" defaultValue="">
-                    <option value="">Choose one</option>
-                    <option>Social media</option><option>Friend or colleague</option><option>Event</option>
-                    <option>Partner organisation</option><option>Search engine</option><option>Other</option>
-                  </select>
-                </Field>
-              </div>
-            </section>
+                </Section>
 
-            <section>
-              <h2>4. Consent</h2>
-              <label className="check">
-                <input type="checkbox" name="consent" required />
-                <span>I confirm the information above is accurate, and I agree that Investable Foundation may store and use it
-                  to assess my application and contact me about mentorship, in line with POPIA. <span className="req">*</span></span>
-              </label>
-              <button type="submit">Submit application</button>
-            </section>
-          </form>
+                <Section index={1} lede="There are no wrong answers here. Founders come from every kind of background, and this helps us pick the right mentor for you.">
+                  <div className="grid">
+                    <Field label="Highest level of education" required>
+                      <Select name="educationLevel" options={["Some high school", "Matric / high school certificate", "Certificate or diploma", "Bachelor's degree", "Honours degree or postgraduate diploma", "Master's degree", "Doctorate", "Other"]} />
+                    </Field>
+                    <Field label="Field of study" hint="if any"><input type="text" name="fieldOfStudy" placeholder="e.g. Accounting, Engineering" /></Field>
+                    <Field label="Where did you study?" hint="optional" full><input type="text" name="institution" placeholder="School, college or university" /></Field>
+                    <Field label="Other training, courses or certifications" hint="optional" full>
+                      <textarea name="otherTraining" placeholder="Short courses, accelerators, professional certifications, online learning" />
+                    </Field>
+                    <Field label="Total years of work experience" required>
+                      <Select name="yearsExperience" options={["Less than 1 year", "1 to 3 years", "4 to 7 years", "8 to 15 years", "More than 15 years"]} />
+                    </Field>
+                    <Field label="Years working in your business's industry" required>
+                      <Select name="yearsInIndustry" options={["None before this business", "Less than 1 year", "1 to 3 years", "4 to 7 years", "8 years or more"]} />
+                    </Field>
+                    <Field label="Most recent job before or alongside this business" hint="title and employer" full>
+                      <input type="text" name="recentJob" placeholder="e.g. Sales manager at a retail bank" />
+                    </Field>
+                    <Field label="How are you working on the business right now?" required>
+                      <Select name="workStatus" options={["Full-time on this business", "Part-time, with another job", "Part-time, while studying", "Not started working on it yet"]} />
+                    </Field>
+                    <Field label="Have you started a business before?" required>
+                      <Select name="previousBusiness" options={["No, this is my first", "Yes, and it is still running", "Yes, and it closed", "Yes, and I sold it"]} />
+                    </Field>
+                    <Field label="Have you managed a team?" required full>
+                      <Select name="managedTeam" options={["No", "Yes, 1 to 5 people", "Yes, 6 to 20 people", "Yes, more than 20 people"]} />
+                    </Field>
+                    <Field label="Tell us about your work experience and how it prepared you to run this business" required full>
+                      <textarea name="experienceSummary" required placeholder="Jobs you've held, skills you built, and what led you to start" />
+                    </Field>
+                  </div>
+                </Section>
+
+                <Section index={2}>
+                  <div className="grid">
+                    <Field label="Business name" required><input type="text" name="businessName" required /></Field>
+                    <Field label="Website" hint="optional"><input type="url" name="website" placeholder="https://" /></Field>
+                    <Field label="Industry or sector" required><input type="text" name="sector" required placeholder="e.g. Fintech, Agriculture" /></Field>
+                    <Field label="Year started" required><input type="number" name="yearStarted" min="1980" max="2030" required placeholder="e.g. 2023" /></Field>
+                    <Field label="Stage" required>
+                      <Select name="stage" options={["Idea", "Building a prototype or MVP", "Launched, no revenue yet", "Early revenue", "Growing revenue"]} />
+                    </Field>
+                    <Field label="Is the business registered?" required>
+                      <Select name="registered" options={["Yes", "No", "In progress"]} />
+                    </Field>
+                    <Field label="Team size" required hint="including founders">
+                      <Select name="teamSize" options={["Just me", "2 to 5", "6 to 20", "More than 20"]} />
+                    </Field>
+                    <Field label="Revenue in the last 12 months" required>
+                      <Select name="revenue" options={["None yet", "Under R100k", "R100k to R1m", "R1m to R10m", "Over R10m"]} />
+                    </Field>
+                    <Field label="Funding raised so far" required full>
+                      <Select name="funding" options={["None, self-funded", "Friends and family", "Grants", "Angel investment", "Venture capital", "Loans or debt"]} />
+                    </Field>
+                    <Field label="What does your business do?" required hint="2 to 3 sentences" full>
+                      <textarea name="description" required />
+                    </Field>
+                    <Field label="Who are your customers, and what problem do you solve for them?" required full>
+                      <textarea name="problem" required />
+                    </Field>
+                  </div>
+                </Section>
+
+                <Section index={3}>
+                  <div className="grid">
+                    <Field label="Where do you need help most?" required hint="choose all that apply" full>
+                      <div className="chips">
+                        {HELP_AREAS.map(a => (
+                          <label key={a} className="chip">
+                            <input type="checkbox" name="helpAreas" value={a} onChange={() => setHelpError(false)} />
+                            {a}
+                          </label>
+                        ))}
+                      </div>
+                      {helpError && <div className="error" role="alert">Choose at least one area so we know where to help.</div>}
+                    </Field>
+                    <Field label="What is the biggest challenge your business faces right now?" required full>
+                      <textarea name="challenge" required />
+                    </Field>
+                    <Field label="What would success look like after 6 months of mentorship?" required full>
+                      <textarea name="success" required />
+                    </Field>
+                    <Field label="Time you can commit each month" required>
+                      <Select name="timeCommitment" options={["1 to 2 hours", "3 to 5 hours", "More than 5 hours"]} />
+                    </Field>
+                    <Field label="How did you hear about us?" hint="optional">
+                      <Select name="referral" required={false} options={["Social media", "Friend or colleague", "Event", "Partner organisation", "Search engine", "Other"]} />
+                    </Field>
+                  </div>
+                </Section>
+
+                <Section index={4}>
+                  <label className="consent">
+                    <input type="checkbox" name="consent" required />
+                    <span>I confirm this information is accurate. I agree that Investable Foundation may store and use it to assess
+                      my application and contact me about mentorship, in line with POPIA. <span className="req">*</span></span>
+                  </label>
+                  <button type="submit">Send application</button>
+                  <p className="after-button">We read every application and reply by email.</p>
+                </Section>
+              </form>
+            </main>
+          )}
         </div>
       );
     }
