@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Investable Foundation</title>
+  <style>
+    body { margin: 0; font-family: system-ui, sans-serif; background: #f6f7f9; color: #1a1a1a;
+           display: grid; place-items: center; min-height: 100vh; padding: 16px; box-sizing: border-box; }
+    .card { background: #fff; border-radius: 16px; padding: 32px; max-width: 420px; width: 100%;
+            box-shadow: 0 4px 24px rgba(0,0,0,.08); text-align: center; }
+    h1 { margin: 0 0 8px; font-size: 1.5rem; }
+    .status { margin-top: 24px; padding: 12px; border-radius: 10px; font-weight: 600; }
+    .ok { background: #e6f6ec; color: #17663a; }
+    .bad { background: #fdecec; color: #a12020; }
+    .wait { background: #eef1f5; color: #555; }
+    button { margin-top: 16px; padding: 10px 20px; border: 0; border-radius: 8px;
+             background: #1a1a1a; color: #fff; font-size: 1rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"></script>
+
+  <script type="text/babel">
+    const REPO = "Investable-business/investable-foundation";
+
+    function App() {
+      const [status, setStatus] = React.useState("wait");
+
+      function check() {
+        setStatus("wait");
+        fetch(`https://api.github.com/repos/${REPO}`)
+          .then(r => setStatus(r.ok ? "ok" : "bad"))
+          .catch(() => setStatus("bad"));
+      }
+
+      React.useEffect(check, []);
+
+      const text = {
+        wait: "Checking connection…",
+        ok: "✅ Connected to GitHub",
+        bad: "❌ Could not reach GitHub",
+      }[status];
+
+      return (
+        <div className="card">
+          <h1>Investable Foundation</h1>
+          <p>Test page. If you can see this, React is working.</p>
+          <div className={`status ${status}`}>{text}</div>
+          <button onClick={check}>Check again</button>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
